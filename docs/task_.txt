@@ -1,0 +1,87 @@
+ID2
+
+ENSA - Al Hoceima
+
+École Nationale des Sciences Appliquées- AL Hoceima
+Filière : Ingénierie des Données
+Deuxième Année
+
+Mini-Projet : Transformers et Systèmes RAG
+
+1
+
+Partie 1 : Exploration des Transformers et tâches NLP
+
+Objectif
+Cette partie vise à familiariser les étudiants avec l’utilisation pratique des modèles Transformers
+pour différentes tâches NLP, en s’appuyant sur la bibliothèque HuggingFace Transformers et un
+ouvrage de référence fourni.
+Travail demandé
+• Exploration de la bibliothèque HuggingFace Transformers :
+– Chargement de modèles pré-entraînés
+– Utilisation de tokenizers
+– Pipelines simplifiés pour tâches NLP
+• Implémentation de plusieurs tâches NLP :
+– Classification de texte
+– Analyse de sentiment
+– Question Answering
+– Résumé automatique
+
+1
+
+ID2
+
+ENSA - Al Hoceima
+
+2
+
+Partie 2 : Systèmes RAG (Retrieval-Augmented Generation)
+
+Objectif
+Comprendre, analyser et implémenter un système RAG permettant d’améliorer les capacités des
+modèles de langage en intégrant une étape de récupération d’information externe.
+Travail demandé
+1. État de l’art
+Les étudiants doivent présenter :
+• Définition des systèmes RAG
+• Limites des LLMs sans accès à des données externes
+• Comparaison des approches :
+– Fine-tuning
+– Prompt engineering
+– RAG
+• Aperçu des variantes modernes des architectures RAG
+2. Architecture et pipeline
+Décrire et formaliser le pipeline complet d’un système RAG :
+1. Encodage des documents sous forme d’embeddings
+2. Indexation de la base de connaissances
+3. Encodage de la requête utilisateur
+4. Recherche des top-k documents pertinents
+5. Construction du prompt augmenté
+6. Génération de la réponse par le LLM
+3. Implémentation
+Les étudiants doivent implémenter un système RAG simple comprenant :
+• Un corpus de documents (PDF, articles ou dataset simplifié)
+• Un modèle d’embeddings (ex : sentence-transformers)
+• Un moteur de recherche vectoriel (FAISS ou équivalent)
+• Un modèle génératif (API ou modèle local)
+2
+
+ID2
+
+ENSA - Al Hoceima
+
+4. Démonstration et expérimentation
+Le système doit être testé avec :
+• Des questions sur le corpus
+• Une comparaison entre réponses avec et sans RAG
+
+Livrables
+• Rapport PDF structuré et bien présenté
+• Code source (Notebook ou projet Python)
+• Démonstration fonctionnelle du système RAG
+
+Bon travail
+
+3
+
+

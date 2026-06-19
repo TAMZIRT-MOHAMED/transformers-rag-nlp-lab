@@ -1,0 +1,426 @@
+\documentclass[12pt,a4paper]{article}
+
+% ── Packages ──
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{array}
+\usepackage{tabularx}
+
+% ── Colors ──
+\definecolor{ensablue}{RGB}{0,74,153}
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codegray}{RGB}{128,128,128}
+
+% ── Code listings ──
+\lstset{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{codegray},
+    keywordstyle=\color{ensablue}\bfseries,
+    commentstyle=\color{codegreen},
+    stringstyle=\color{red!70!black},
+    language=Python,
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    numbersep=5pt,
+    tabsize=4,
+    extendedchars=true,
+    literate={é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ç}{{\c{c}}}1 {œ}{{\oe}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {î}{{\^i}}1 {ï}{{\"i}}1
+}
+
+% ── Headers / Footers ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small ENSA Al Hoceima -- Data Engineering}
+\fancyhead[R]{\small Mini-Project: Transformers \& RAG}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Section styling ──
+\titleformat{\section}{\Large\bfseries\color{ensablue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{ensablue!80!black}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{ensablue!60!black}}{\thesubsubsection}{1em}{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=ensablue,
+    urlcolor=ensablue,
+    citecolor=ensablue
+}
+
+% ══════════════════════════════════════════════════════════════
+\begin{document}
+
+% ── Title Page ──
+\begin{titlepage}
+    \centering
+    \vspace*{0.5cm}
+
+    % Logos properly aligned to left and right
+    \noindent
+    \begin{minipage}{0.45\textwidth}
+        \raggedright
+        \includegraphics[width=3.5cm]{../img/uae_logo.png}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \raggedleft
+        \includegraphics[width=3.5cm]{../img/ENSAH_logo.png}
+    \end{minipage}
+
+    \vspace{2cm}
+
+    {\large\textbf{Abdelmalek Essaâdi University}}\\[0.2cm]
+    {\large National School of Applied Sciences -- Al Hoceima}\\[0.2cm]
+    {\large Department of Data Engineering -- 2\textsuperscript{nd} Year}
+
+    \vspace{1.5cm}
+
+    \rule{\textwidth}{1.5pt}
+    \vspace{0.3cm}
+    {\Huge\bfseries\color{ensablue} Mini-Project Report}\\[0.4cm]
+    {\LARGE\bfseries Transformers \& RAG Systems}\\[0.3cm]
+    {\large Natural Language Processing}
+    \vspace{0.4cm}
+    \rule{\textwidth}{1.5pt}
+
+    \vspace{2cm}
+
+    \begin{minipage}{0.45\textwidth}
+        \textbf{Prepared by:}\\[0.3cm]
+        \textsc{Said} Salma\\
+        \textsc{Tamzirt} Mohamed
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \raggedleft
+        \textbf{Supervised by:}\\[0.3cm]
+        Pr. Tarik \textsc{Boudaa}
+    \end{minipage}
+
+    \vfill
+
+    {\large Academic Year 2024--2025}
+\end{titlepage}
+
+% ── Table of Contents ──
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+% ══════════════════════════════════════════════════════════════
+% PAGE 1
+% ══════════════════════════════════════════════════════════════
+\section{General Introduction}
+
+\subsection{The NLP Context}
+Natural Language Processing (NLP) is a branch of artificial intelligence that enables computers to understand, interpret, and manipulate human language. Over the past decade, the field has undergone a major paradigm shift. We have moved from rule-based systems and traditional machine learning algorithms (such as SVMs or basic Recurrent Neural Networks) to highly sophisticated deep learning architectures capable of capturing deep semantic nuances and context. 
+
+\subsection{The Importance of Transformers}
+The turning point for modern NLP was the introduction of the Transformer architecture by Vaswani et al. in 2017. By replacing sequential processing with the self-attention mechanism, Transformers enabled models to process entire sentences simultaneously. This breakthrough allowed for the training of massive pre-trained language models (such as BERT, GPT, and T5) on vast amounts of text data. These models have achieved state-of-the-art results across virtually all NLP tasks, revolutionizing how we approach machine translation, text generation, and information extraction.
+
+\subsection{Objective of the Mini-Project}
+The primary objective of this mini-project is to bridge the gap between theoretical NLP concepts and practical implementation. By working directly with state-of-the-art models, we aim to understand how these technologies are applied to solve real-world language processing challenges. 
+
+\subsection{Structure of the Project}
+To achieve this objective, the project is structured into two main parts:
+\begin{itemize}
+    \item \textbf{Part 1: NLP Tasks with Hugging Face.} In this part, we explore the Hugging Face \texttt{transformers} library. We familiarize ourselves with tokenizers, pre-trained models, and pipelines by implementing four standard NLP tasks: text classification, sentiment analysis, question answering, and automatic summarization.
+    \item \textbf{Part 2: Retrieval-Augmented Generation (RAG).} In the second part, we tackle one of the major limitations of current language models: their inability to access external or recent knowledge. We study the RAG architecture and implement a complete system capable of answering questions based on a specific, provided document corpus.
+\end{itemize}
+
+All the implementations and experiments were conducted using a Python Notebook (\texttt{transformers\_rag\_nlp\_lab\_v2.ipynb}) running in a Google Colab environment with a Tesla T4 GPU.
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 2
+% ══════════════════════════════════════════════════════════════
+\section{Transformers and Hugging Face}
+
+\subsection{What is a Transformer?}
+A Transformer is a deep learning architecture that relies entirely on \textbf{attention mechanisms} to draw global dependencies between input and output. Unlike RNNs or LSTMs, which read text sequentially, Transformers use \textit{self-attention} to weigh the importance of all words in a sentence relative to each other at the same time. This parallel processing capability makes them highly efficient to train on large datasets.
+
+\subsection{The Role of Pre-Trained Models}
+Training a Transformer from scratch requires massive amounts of text data and computational power. To solve this, the NLP community adopted the \textbf{transfer learning} paradigm. Models are first \textit{pre-trained} on enormous text corpora to learn general language representation (grammar, facts, reasoning abilities). These pre-trained models are then made available to developers, who can either use them directly for "zero-shot" tasks or fine-tune them on small datasets for specific applications.
+
+\subsection{Tokenizers}
+A model cannot understand raw text strings. A \textbf{tokenizer} is the crucial first component of any NLP pipeline. It is responsible for splitting the input text into manageable pieces called "tokens" (which can be words, sub-words, or characters) and converting these tokens into numerical identifiers (\texttt{input\_ids}) that the neural network can process.
+
+\subsection{Hugging Face Pipelines}
+Hugging Face is the leading open-source platform for NLP. It provides the \texttt{transformers} Python library, which abstracts the complex underlying PyTorch or TensorFlow code. The simplest way to use these models is through the \textbf{pipeline} API, which automatically handles the tokenization, model inference, and output decoding in just a few lines of code.
+
+\subsection{Example of a Pipeline Implementation}
+Below is a brief example of how a pipeline is instantiated and used for a task:
+
+\begin{lstlisting}
+from transformers import pipeline
+
+# 1. Initialize the pipeline with a specific task and model
+sentiment_pipeline = pipeline(
+    task="sentiment-analysis",
+    model="cardiffnlp/twitter-xlm-roberta-base-sentiment"
+)
+
+# 2. Provide the input text
+text = "Ce projet de NLP est vraiment très intéressant !"
+
+# 3. Get the prediction
+result = sentiment_pipeline(text)
+print(result) 
+# Output: [{'label': 'positive', 'score': 0.98}]
+\end{lstlisting}
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 3
+% ══════════════════════════════════════════════════════════════
+\section{Implemented NLP Tasks}
+
+In Part 1 of the project, we implemented four key NLP tasks using Hugging Face pipelines.
+
+\subsection{Zero-Shot Text Classification}
+\begin{itemize}[noitemsep]
+    \item \textbf{Objective:} Assign a category to a text without having trained the model specifically for those categories.
+    \item \textbf{Model Used:} \texttt{facebook/bart-large-mnli}
+    \item \textbf{Input:} A text (\textit{"L'équipe a déployé une nouvelle base de données..."}) and a list of candidate labels (\textit{informatique, sport, économie, politique}).
+    \item \textbf{Output:} The probabilities for each label. The model correctly assigned the highest probability (\textbf{0.69}) to the label \textit{"informatique"}.
+\end{itemize}
+
+\subsection{Sentiment Analysis}
+\begin{itemize}[noitemsep]
+    \item \textbf{Objective:} Determine the emotional tone behind a series of words to gain an understanding of the attitudes, opinions, and emotions expressed.
+    \item \textbf{Model Used:} \texttt{cardiffnlp/twitter-xlm-roberta-base-sentiment}
+    \item \textbf{Input:} A text sentence (e.g., \textit{"Je n'ai pas du tout aimé cette expérience."}).
+    \item \textbf{Output:} A sentiment label and a confidence score. The model output \textbf{"Negative"} with a score of \textbf{0.85}.
+\end{itemize}
+
+\subsection{Question Answering}
+\begin{itemize}[noitemsep]
+    \item \textbf{Objective:} Extract the exact answer to a user's question from a provided context paragraph (Extractive QA).
+    \item \textbf{Model Used:} \texttt{deepset/xlm-roberta-base-squad2}
+    \item \textbf{Input:} A \textbf{Context} (A text explaining the ENSA Al Hoceima Data Engineering mini-project) and a \textbf{Question} (\textit{"Quel est le sujet du mini-projet ?"}).
+    \item \textbf{Output:} The exact string extracted from the text: \textit{"l'exploration des modèles Transformers"}, along with a confidence score.
+\end{itemize}
+
+\subsection{Automatic Summarization}
+\begin{itemize}[noitemsep]
+    \item \textbf{Objective:} Produce a concise and fluent summary while preserving key information and overall meaning.
+    \item \textbf{Model Used:} \texttt{lincoln/mbart-mlsum-automatic-summarization}
+    \item \textbf{Input:} A long paragraph detailing the history and mechanism of the Transformer architecture.
+    \item \textbf{Output:} A generated short summary: \textit{"Le traitement du langage naturel a franchi un cap important avec l'introduction de l'architecture Transformer en 2017."}
+\end{itemize}
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 4
+% ══════════════════════════════════════════════════════════════
+\section{State of the Art on RAG}
+
+\subsection{Definition of RAG}
+Retrieval-Augmented Generation (RAG) is a hybrid artificial intelligence framework introduced in 2020. It bridges the gap between traditional information retrieval systems (like search engines) and modern generative Large Language Models (LLMs). When a user asks a question, a RAG system first retrieves relevant documents from an external database, and then feeds those documents to the LLM to generate a highly contextualized and accurate answer.
+
+\subsection{Limits of LLMs Alone}
+While powerful, LLMs operating on their own suffer from several critical flaws:
+\begin{itemize}
+    \item \textbf{Hallucinations:} When an LLM doesn't know an answer, it often invents highly plausible but entirely false information.
+    \item \textbf{Lack of Recent Data:} The knowledge of an LLM is "frozen" at the time its training data was collected. It does not know about events that occurred yesterday.
+    \item \textbf{Absence of Private Sources:} An LLM trained on public internet data cannot answer questions about internal enterprise documents, private emails, or proprietary databases.
+\end{itemize}
+
+\subsection{Comparison of Approaches}
+To address these limitations, three main approaches are commonly discussed in the industry. The table below compares them:
+
+\begin{table}[H]
+\centering
+\caption{Comparison: Fine-Tuning, Prompt Engineering, and RAG}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{2.5cm}|X|X|X|}
+\hline
+\textbf{Feature} & \textbf{Fine-Tuning} & \textbf{Prompt Engineering} & \textbf{RAG} \\
+\hline
+\textbf{Principle} & Retrain the model's weights using specific, specialized data. & Carefully design the input text to guide the model's behavior. & Retrieve external data dynamically and pass it to the model. \\
+\hline
+\textbf{Cost \& Effort} & \textbf{High.} Requires GPUs, annotated data, and training time. & \textbf{Low.} Requires only experimentation with text. & \textbf{Medium.} Requires setting up a vector database and retrieval logic. \\
+\hline
+\textbf{Data Updates} & Must completely retrain to add new knowledge. & Limited by the model's maximum context window. & \textbf{Instant.} Simply add new documents to the database. \\
+\hline
+\textbf{Traceability} & None. Cannot cite sources. & None. & \textbf{High.} Can point exactly to the retrieved document used. \\
+\hline
+\end{tabularx}
+\end{table}
+
+RAG emerges as the most practical solution for knowledge-intensive tasks, as it eliminates hallucinations and provides traceability without the heavy costs of fine-tuning.
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 5
+% ══════════════════════════════════════════════════════════════
+\section{Architecture of the RAG Pipeline}
+
+To build a RAG system, data must flow through a specific sequence of operations. This process is divided into an offline phase (data ingestion) and an online phase (querying).
+
+\subsection{Pipeline Steps}
+
+\begin{enumerate}
+    \item \textbf{Documents:} The raw knowledge base (PDFs, text files, databases) is collected and split into smaller, manageable pieces called "chunks".
+    \item \textbf{Embeddings:} Each chunk is passed through an embedding model, which translates the semantic meaning of the text into a dense mathematical vector.
+    \item \textbf{Vector Indexation:} These vectors are stored in a specialized Vector Database capable of performing rapid similarity searches.
+    \item \textbf{User Query:} The user asks a question in natural language.
+    \item \textbf{Top-K Search:} The user's query is converted into an embedding. The vector database calculates the distance between the query vector and all document vectors, returning the "Top-K" most semantically similar chunks.
+    \item \textbf{Augmented Prompt:} The retrieved chunks are injected into a predefined prompt template alongside the user's original question.
+    \item \textbf{Generated Response:} The generative LLM reads the augmented prompt and crafts a final answer based \textit{strictly} on the provided context.
+\end{enumerate}
+
+\subsection{Architecture Diagram}
+
+The following diagram illustrates the flow of data through the RAG architecture implemented in our project:
+
+\begin{figure}[H]
+\centering
+\begin{verbatim}
+       [ Offline Data Ingestion ]           [ Online Querying ]
+
+          1. Documents Corpus                 4. User Query
+                  |                                 |
+                  v                                 v
+          2. Text Embeddings               Encode to Embedding
+                  |                                 |
+                  v                                 v
+          3. Vector Index <------------ 5. Similarity Search (Top-K)
+                (FAISS)                             |
+                                                    v
+                                         Retrieve Relevant Context
+                                                    |
+                                                    v
+                                         6. Augmented Prompt
+                                         (Context + User Query)
+                                                    |
+                                                    v
+                                         7. Generative LLM
+                                                    |
+                                                    v
+                                            Generated Answer
+\end{verbatim}
+\caption{Simplified architecture of the Retrieval-Augmented Generation system.}
+\end{figure}
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 6
+% ══════════════════════════════════════════════════════════════
+\section{Implementation of the RAG System}
+
+We implemented the architecture described above using Python within our Notebook environment. Below are the details of the specific technologies and components utilized.
+
+\subsection{The Document Corpus}
+To ensure the system is self-contained and reproducible, we created a simplified, thematic dataset. It consists of 14 distinct text chunks covering topics highly relevant to our course: Transformer architectures, specific NLP tasks, definitions of RAG, and comparisons with fine-tuning. These documents serve as the external knowledge base.
+
+\subsection{The Embeddings Model}
+To convert our text chunks into vectors, we used the \texttt{sentence-transformers} library. Specifically, we selected the model \texttt{paraphrase-multilingual-MiniLM-L12-v2}. This is a highly efficient, lightweight model that supports multiple languages (including French) and outputs dense vectors of 384 dimensions.
+
+\subsection{The Vector Engine: FAISS}
+For the indexation and retrieval phase, we utilized \textbf{FAISS} (Facebook AI Similarity Search). We implemented an \texttt{IndexFlatL2} index, which performs an exact nearest-neighbor search by calculating the Euclidean distance (L2 norm) between the query vector and all the stored document vectors. While exhaustive, it is perfectly suited and highly accurate for our dataset size.
+
+\subsection{The Generative Model}
+For the generation step, we used the Hugging Face \texttt{pipeline} for text-to-text generation. The model selected was \textbf{\texttt{google/flan-t5-small}}. Flan-T5 is an instruction-tuned model that is particularly adept at following prompts and synthesizing information from provided contexts, making it an excellent lightweight choice for a RAG generator.
+
+\subsection{Structure of the Python Project}
+The implementation is structured sequentially in the \texttt{transformers\_rag\_nlp\_lab\_v2.ipynb} notebook:
+\begin{itemize}[noitemsep]
+    \item \textbf{Section 2.3.1 - 2.3.3:} Library imports and definition of the document corpus array.
+    \item \textbf{Section 2.3.4 - 2.3.5:} Loading the SentenceTransformer model and encoding the corpus into a NumPy array of shape \texttt{(14, 384)}.
+    \item \textbf{Section 2.3.6 - 2.3.7:} Initializing the FAISS index, adding the vectors, and creating the \texttt{rechercher\_documents\_pertinents()} search function.
+    \item \textbf{Section 2.3.8:} Loading the Flan-T5 model and assembling the final \texttt{systeme\_rag()} function, which orchestrates the retrieval, prompt building, and generation steps.
+\end{itemize}
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 7
+% ══════════════════════════════════════════════════════════════
+\section{Experimentation and Results}
+
+To evaluate the effectiveness of our implementation, we tested the system with several questions related to our corpus. Most importantly, we compared the responses generated by the model \textbf{without RAG} (relying solely on its internal, pre-trained weights) versus \textbf{with RAG} (using our FAISS retrieval pipeline).
+
+\subsection{Tested Questions}
+We formulated five specific questions:
+\begin{enumerate}[noitemsep]
+    \item Qu'est-ce qu'un système RAG ?
+    \item Quelle est la différence entre le fine-tuning et le RAG ?
+    \item Comment fonctionne le mécanisme d'attention dans les Transformers ?
+    \item Quels sont les avantages du RAG par rapport à un LLM classique ?
+    \item Comment les embeddings sont-ils utilisés dans un système RAG ?
+\end{enumerate}
+
+\subsection{Comparison: Without RAG vs. With RAG}
+Below is an excerpt of the results for two of the key questions:
+
+\vspace{0.5cm}
+\noindent\textbf{Question: Quelle est la différence entre le fine-tuning et le RAG ?}
+\begin{itemize}
+    \item \textbf{Without RAG:} The base model produced a very generic, short, and somewhat confused response, failing to highlight the key differences in cost or data updating.
+    \item \textbf{With RAG:} The model generated a precise answer explaining that fine-tuning requires retraining on specific data (costly), whereas RAG allows instant knowledge updates without retraining and provides source traceability.
+    \item \textbf{Sources Used:} The system indicated it retrieved Document 13 (Distance: 13.9) and Document 12 (Distance: 14.5).
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent\textbf{Question: Comment les embeddings sont-ils utilisés dans un système RAG ?}
+\begin{itemize}
+    \item \textbf{Without RAG:} The model attempted to define embeddings generally but missed their specific operational role within the retrieval pipeline.
+    \item \textbf{With RAG:} The model accurately explained that documents are first encoded into embeddings and indexed in a vector base like FAISS. Then, the user's question is encoded to find the most similar document vectors.
+    \item \textbf{Sources Used:} The system retrieved Document 9 (Distance: 12.1) and Document 10 (Distance: 13.0).
+\end{itemize}
+
+\subsection{Analysis of Results}
+The experimentation clearly proves the value of the RAG architecture. 
+When operating \textbf{without RAG}, the small Flan-T5 model lacked the specific knowledge required to answer technical questions accurately. 
+However, \textbf{with RAG}, the exact same model was able to provide highly precise, factual, and contextualized answers. Furthermore, the RAG system provided transparency: by outputting the retrieved chunks and their FAISS distances, we could directly trace the origin of the model's knowledge, ensuring the absence of hallucinations.
+
+\newpage
+% ══════════════════════════════════════════════════════════════
+% PAGE 8
+% ══════════════════════════════════════════════════════════════
+\section{Conclusion, Limits, and Perspectives}
+
+\subsection{Summary of Learnings}
+This mini-project successfully bridged the gap between theoretical knowledge and practical NLP engineering. In the first phase, we learned how to leverage the Hugging Face ecosystem to rapidly deploy state-of-the-art Transformer models for tasks like classification and summarization. 
+
+In the second phase, we successfully architected and built a Retrieval-Augmented Generation (RAG) system from scratch. We gained hands-on experience with vector embeddings via \texttt{sentence-transformers}, similarity search using \textbf{FAISS}, and context-augmented text generation. The comparative results conclusively demonstrated that combining a retrieval engine with a language model produces a system that is far more accurate, factual, and traceable than an LLM alone.
+
+\subsection{Limits of the Current Implementation}
+While functional, our implementation has several constraints:
+\begin{itemize}
+    \item \textbf{Small Corpus:} We utilized a simplified dataset of only 14 documents. In a real-world scenario, processing large PDFs involves complex chunking strategies (handling overlaps, tables, and images) that we bypassed.
+    \item \textbf{Dependence on Embedding Quality:} The entire system relies on the semantic accuracy of the \texttt{MiniLM} embedding model. If the embedding model fails to place the query and the relevant document close together in the vector space, the generative model will receive the wrong context and fail.
+    \item \textbf{Generative Model Capacity:} We used \texttt{flan-t5-small} due to compute constraints. While effective with good context, it sometimes struggles with complex reasoning or generating fluent, lengthy French text compared to larger models.
+\end{itemize}
+
+\subsection{Perspectives and Future Work}
+To evolve this project into a production-ready application, several enhancements could be implemented:
+\begin{itemize}
+    \item \textbf{Robust Document Pipeline:} Integrate tools like LangChain or LlamaIndex to automatically ingest, clean, and chunk massive external knowledge bases (PDFs, Confluence wikis, websites).
+    \item \textbf{Advanced Retrieval (Re-ranking):} Implement a two-stage retrieval process. First, use FAISS to retrieve the top 20 documents, then use a Cross-Encoder model to re-rank them, sending only the top 3 most highly relevant chunks to the LLM.
+    \item \textbf{Interactive Web Interface:} Wrap the Python logic in a web framework such as Streamlit or Gradio to provide a user-friendly, ChatGPT-like interface where users can upload documents and chat with them in real-time.
+\end{itemize}
+
+\end{document}
